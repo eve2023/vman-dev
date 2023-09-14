@@ -1,24 +1,25 @@
 /*
- *      pcmanfm.c
- *
- *      Copyright 2009 - 2010 Hong Jen Yee (PCMan) <pcman.tw@gmail.com>
- *      Copyright 2012 Andriy Grytsenko (LStranger) <andrej@rep.kiev.ua>
- *
- *      This program is free software; you can redistribute it and/or modify
- *      it under the terms of the GNU General Public License as published by
- *      the Free Software Foundation; either version 2 of the License, or
- *      (at your option) any later version.
- *
- *      This program is distributed in the hope that it will be useful,
- *      but WITHOUT ANY WARRANTY; without even the implied warranty of
- *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *      GNU General Public License for more details.
- *
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- *      MA 02110-1301, USA.
- */
+Copyright (c) 2023 Eve
+Licensed under the GNU General Public License version 3 (GPLv3)
+*************************************************************************
+vmanfm.c
+*************************************************************************
+VMAN is free software; you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any
+later version.
+
+VMAN is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along
+with VMAN. If not, see <https://www.gnu.org/licenses/>.
+*************************************************************************
+* Copyright 2009 - 2010 Hong Jen Yee (PCMan) <pcman.tw@gmail.com>
+* Copyright 2012 Andriy Grytsenko (LStranger) <andrej@rep.kiev.ua>
+*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -67,6 +68,7 @@ static char* ipc_cwd = NULL;
 
 static int n_pcmanfm_ref = 0;
 
+// TODO These strings are low pri for vnstr migration.
 static GOptionEntry opt_entries[] =
 {
     /* options only acceptable by first pcmanfm instance. These options are not passed through IPC */
@@ -89,7 +91,7 @@ static GOptionEntry opt_entries[] =
 
 static const char* valid_wallpaper_modes[] = {"color", "stretch", "fit", "center", "tile"};
 
-static gboolean pcmanfm_run();
+static gboolean vmanfm_run();
 
 /* it's not safe to call gtk+ functions in unix signal handler
  * since the process is interrupted here and the state of gtk+ is unpredictable. */
@@ -162,7 +164,7 @@ static void single_inst_cb(const char* cwd, int screen_num)
             }
         }
     }
-    pcmanfm_run();
+    vmanfm_run();
 }
 
 int main(int argc, char** argv)
@@ -222,7 +224,7 @@ int main(int argc, char** argv)
 
     fm_gtk_init(config);
     /* the main part */
-    if(pcmanfm_run())
+    if(vmanfm_run())
     {
         fm_volume_manager_init();
         gtk_main();
@@ -262,7 +264,7 @@ static FmJobErrorAction on_file_info_job_error(FmFileInfoJob* job, GError* err, 
     return FM_JOB_CONTINUE;
 }
 
-gboolean pcmanfm_run()
+gboolean vmanfm_run()
 {
     gboolean ret = TRUE;
 
@@ -416,12 +418,12 @@ gboolean pcmanfm_run()
             {
                 /* If the function is called the first time and we're in daemon mode,
                * don't open any folder.
-               * Checking if pcmanfm_run() is called the first time is needed to fix
+               * Checking if vmanfm_run() is called the first time is needed to fix
                * #3397444 - pcmanfm dont show window in daemon mode if i call 'pcmanfm' */
             }
             else
             {
-                /* If we're not in daemon mode, or pcmanfm_run() is called because another
+                /* If we're not in daemon mode, or vmanfm_run() is called because another
                * instance send signal to us, open cwd by default. */
                 FmPath* path;
                 char* cwd = ipc_cwd ? ipc_cwd : g_get_current_dir();

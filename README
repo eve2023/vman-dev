@@ -1,2 +1,13 @@
-Compile the program with configure option --sysconfdir=/etc
+BUILDING
 
+aclocal
+
+automake
+
+PKG_CONFIG_PATH=/usr/local/lib/pkgconfig ./configure
+
+make
+
+LD_LIBRARY_PATH=/usr/local/lib src/pcmanfm
+
+Compile the program with configure option --sysconfdir=/etc
